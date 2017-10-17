@@ -2,14 +2,37 @@
 <?php
 //var_dump($_POST);
 //echo $file = $_POST["push_button"];
-$file = $_POST["push_button"];
 
-header("Content-Type: ", image_type_to_mime_type(IMAGETYPE_WBMP));
+//print_r($_FILES);
+header('Content-type: text/plain');
+$file = $_FILES["file"];
+echo $file["size"];
+echo $file['type'], "\n";
+$size = $file["size"];
+if($size > 35000){
+    die("Fil för stor");
+}
 
-$image = imagecreatefrompng($file);
+$type =$file["type"];
 
-//header('Content-Type: ' . image_type_to_mime_type(IMAGETYPE_WBMP));
-image2wbmp($image); // output the stream directly
-imagedestroy($image);
+switch ($type){
+
+    case"text/plain":
+echo readfile($file["name"]);
+break;
+    case"image/jpeg":
+        header('Content-Type:'.$type, true);
+       // header('Content-Length: ' . filesize($file));
+        readfile($file);
+        break;
+    case"image/png":
+        header('Content-Type:'.$type, true);
+        // header('Content-Length: ' . filesize($file));
+        readfile($file);
+        break;
+    default:
+        echo $file["name"], $type, $size;
+        break;
+}
 
     ?>
