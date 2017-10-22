@@ -1,38 +1,33 @@
-
 <?php
-//var_dump($_POST);
-//echo $file = $_POST["push_button"];
+header('Content-type: text/plain');
 
 //print_r($_FILES);
-header('Content-type: text/plain');
-$file = $_FILES["file"];
-echo $file["size"];
-echo $file['type'], "\n";
-$size = $file["size"];
-if($size > 35000){
-    die("Fil för stor");
+if($_FILES['file']['size'] > 300000 or empty($_FILES)){
+    die();
 }
+    $file = $_FILES['file']['tmp_name'];
+   $type = $_FILES['file']['type'];
 
-$type =$file["type"];
+switch ($type) {
 
-switch ($type){
+        case"image/jpeg":
+            header('Content-Type: ' . $type );
+
+            readfile($file);
+            break;
+
+        case"image/png":
+            header('Content-Type: ' . $type);
+
+            readfile($file);
+            break;
 
     case"text/plain":
-echo readfile($file["name"]);
-break;
-    case"image/jpeg":
-        header('Content-Type:'.$type, true);
-       // header('Content-Length: ' . filesize($file));
         readfile($file);
         break;
-    case"image/png":
-        header('Content-Type:'.$type, true);
-        // header('Content-Length: ' . filesize($file));
-        readfile($file);
-        break;
+
     default:
-        echo $file["name"], $type, $size;
+        echo $file['name']. ' ' . $type . ' ' . $file["size"];
         break;
 }
-
     ?>
